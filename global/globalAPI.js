@@ -29,3 +29,6 @@ export const actionRequest = (status, connectionId) =>
 
 export const userFeed = () =>
   axiosClient.get("/user/feed", { withCredentials: true })
+
+export const sentConnectionRequest = (status, receiverUserId) =>
+  axiosClient.post(`/request/send/${status}/${receiverUserId}`, {}, { withCredentials: true })

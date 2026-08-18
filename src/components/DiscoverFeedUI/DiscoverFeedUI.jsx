@@ -1,27 +1,31 @@
 import { useState } from "react";
-import { Heart, X, MapPin, Briefcase, Cake, User } from "lucide-react";
+import { Heart, X, MapPin, Briefcase, Cake, User, LoaderCircle } from "lucide-react";
+import { sentConnectionRequest } from "../../../global/globalAPI";
 
 const DiscoverFeedUI = ({ feedData = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(null);
-  const [animating, setAnimating] = useState(false);4
-  const age = 45
+  const [loading, setLoading] = useState(false);
 
   const developer = feedData[currentIndex];
 
+  const handleAction = async (status) => {
+    if (!developer || loading) return;
 
-  const handleAction = (type) => {
-    if (animating || !developer) return;
+    try {
+      setLoading(true);
 
-    setAnimating(true);
+      // API CALL
+      const response = await sentConnectionRequest(status, developer._id);
 
-    setDirection(type === "Interested" ? "right" : "left");
+      console.log("API response:", response);
 
-    setTimeout(() => {
+      // Only move to next card if API succeeds
       setCurrentIndex((prev) => prev + 1);
-      setDirection(null);
-      setAnimating(false);
-    }, 300);
+    } catch (err) {
+      console.log("Connection request failed:", err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!developer) {
@@ -35,21 +39,11 @@ const DiscoverFeedUI = ({ feedData = [] }) => {
           </h2>
 
           <p className="mt-2 text-slate-500">No more developers to discover.</p>
-
-          <button
-            onClick={() => setCurrentIndex(0)}
-            className="mt-6 rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700"
-          >
-            Start Again
-          </button>
         </div>
       </div>
     );
   }
 
-
-
-  // Handle skills whether API gives string or array
   const skills = Array.isArray(developer.skills)
     ? developer.skills
     : developer.skills
@@ -65,30 +59,7 @@ const DiscoverFeedUI = ({ feedData = [] }) => {
   return (
     <div className="flex items-center justify-center">
       {/* CARD */}
-      <div
-        className={`
-          w-[440px]
-          rounded-[30px]
-          bg-white
-          p-4
-          shadow-[0_25px_60px_rgba(0,0,0,.12)]
-          transition-all
-          duration-300
-          ease-out
-
-          ${
-            direction === "right"
-              ? "translate-x-[80%] rotate-[5deg] opacity-0"
-              : ""
-          }
-
-          ${
-            direction === "left"
-              ? "-translate-x-[80%] -rotate-[5deg] opacity-0"
-              : ""
-          }
-        `}
-      >
+      <div className="w-[440px] rounded-[30px] bg-white p-4 shadow-[0_25px_60px_rgba(0,0,0,.12)]">
         {/* IMAGE */}
         <div className="relative overflow-hidden rounded-[24px]">
           <img
@@ -114,14 +85,14 @@ const DiscoverFeedUI = ({ feedData = [] }) => {
 
             {/* Age + Gender */}
             <div className="mt-2 flex items-center gap-4 text-sm text-slate-200">
-              {age && (
+              {developer.age && (
                 <div className="flex items-center gap-1.5">
                   <Cake size={15} />
-                  <span>23</span>
+                  <span>{developer.age}</span>
                 </div>
               )}
 
-              {age && developer.gender && (
+              {developer.age && developer.gender && (
                 <span className="h-1 w-1 rounded-full bg-slate-300" />
               )}
 
@@ -192,8 +163,8 @@ const DiscoverFeedUI = ({ feedData = [] }) => {
         <div className="mt-8 grid grid-cols-2 gap-4">
           {/* Ignore */}
           <button
-            disabled={animating}
-            onClick={() => handleAction("Ignore")}
+            disabled={loading}
+            onClick={() => handleAction("Ignored")}
             className="
               flex
               h-12
@@ -214,16 +185,18 @@ const DiscoverFeedUI = ({ feedData = [] }) => {
               hover:bg-slate-50
               hover:shadow-md
               active:scale-[0.98]
+              disabled:cursor-not-allowed
               disabled:opacity-50
             "
           >
             <X size={21} />
-            Ignore
+
+            {loading ? "Processing..." : "Ignore"}
           </button>
 
           {/* Interested */}
           <button
-            disabled={animating}
+            disabled={loading}
             onClick={() => handleAction("Interested")}
             className="
               flex
@@ -246,11 +219,13 @@ const DiscoverFeedUI = ({ feedData = [] }) => {
               hover:shadow-xl
               hover:shadow-pink-200
               active:scale-[0.98]
+              disabled:cursor-not-allowed
               disabled:opacity-50
             "
           >
             <Heart size={21} />
-            Interested
+
+            {loading ? <LoaderCircle className=" animate-spin" /> : "Interested"}
           </button>
         </div>
       </div>
