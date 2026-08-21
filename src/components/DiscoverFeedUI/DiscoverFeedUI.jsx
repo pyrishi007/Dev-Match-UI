@@ -56,7 +56,7 @@ const DiscoverFeedUI = ({ feedData = [] }) => {
       `${developer.firstname} ${developer.lastname}`,
     )}&background=eff6ff&color=2563eb&size=500`;
 
-  return (
+  return (  
     <div className="flex items-center justify-center">
       {/* CARD */}
       <div className="w-[440px] rounded-[30px] bg-white p-4 shadow-[0_25px_60px_rgba(0,0,0,.12)]">
@@ -195,7 +195,7 @@ const DiscoverFeedUI = ({ feedData = [] }) => {
           </button>
 
           {/* Interested */}
-          <button
+          <button 
             disabled={loading}
             onClick={() => handleAction("Interested")}
             className="
@@ -234,3 +234,4 @@ const DiscoverFeedUI = ({ feedData = [] }) => {
 };
 
 export default DiscoverFeedUI;
+ 
