@@ -3,7 +3,7 @@ import axios from "axios";
 
 //MAKING AS BASE URL WITH AUTHRIZATION
 const axiosClient = axios.create({
-  baseURL: "http://localhost:4000/",
+  baseURL: "/api",
 });
 
 export const loggedInUser = (data) =>
