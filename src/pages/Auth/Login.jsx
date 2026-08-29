@@ -1,7 +1,8 @@
 // ==HOOKS===
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 // ==API QUERY===
 import { loggedInUser } from "../../../global/globalAPI";
 
@@ -18,15 +19,15 @@ import { addUser } from "../../redux/features/userSlice";
 
 const Login = () => {
   //LOGIN DATA STATE
-  const [email, setEmail] = useState("rahul.sharma@gmail.com");
-  const [password, setPassword] = useState("Rahul@123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   //ROUTE HOOK
   const navigate = useNavigate();
 
   //STORE ACTIONS
   const dispatch = useDispatch();
-  const user = useSelector((store) => store.user);
+  // const user = useSelector((store) => store.user);
 
   //HANLDERS
   const handleEmailChange = (e) => {
