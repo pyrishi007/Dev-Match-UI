@@ -48,9 +48,11 @@ const AppLayout = () => {
   };
 
   //CALL USER AFTER 1st LOAD
-  useEffect(() => {
+useEffect(() => {
+  if (location.pathname !== "/login") {
     user();
-  }, [location.pathname]);
+  }
+}, [location.pathname]);
 
   return (
     <div className="min-h-screen flex flex-col">
