@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // ==API QUERY===
-import { loggedInUser } from "../../../global/globalAPI";
+import { loggedInUser, signUp } from "../../../global/globalAPI";
 
 // ==UTILS==
 import {
@@ -14,72 +14,147 @@ import {
   Mail,
   RectangleEllipsis,
   LogIn,
+  User,
+  UserPlus,
 } from "lucide-react";
+
 import { addUser } from "../../redux/features/userSlice";
 
 const Login = () => {
-  //LOGIN DATA STATE
+  // AUTH MODE
+  const [isSignUp, setIsSignUp] = useState(false);
+
+  // FORM DATA STATE
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  //ROUTE HOOK
+  // ROUTE HOOK
   const navigate = useNavigate();
 
-  //STORE ACTIONS
+  // STORE ACTIONS
   const dispatch = useDispatch();
-  // const user = useSelector((store) => store.user);
 
-  //HANLDERS
+  // =========================
+  // HANDLERS
+  // =========================
+
+  const handleFirstNameChange = (e) => {
+    setFirstName(e.target.value);
+  };
+
+  const handleLastNameChange = (e) => {
+    setLastName(e.target.value);
+  };
+
   const handleEmailChange = (e) => {
-    const { value } = e.target;
-    setEmail(value);
-  };
-  const handlePasswordChange = (e) => {
-    const { value } = e.target;
-    setPassword(value);
+    setEmail(e.target.value);
   };
 
-  //FORM HANDLING
-  const handleForm = async () => {
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+  };
+
+  // =========================
+  // LOGIN
+  // =========================
+
+  const handleLogin = async () => {
     try {
-      //DATA EXTEACT
       const loggedInUserData = {
         email: email,
         password: password,
       };
 
-      //SENDING DATA TO BACKEND
       await loggedInUser(loggedInUserData)
         .then((value) => {
-          //DATA EXTRACTION
           const { data } = value.data;
 
-          //EXTRACTIN USER INFO
           const userData = {
             email: data.email,
             firstname: data.firstname,
             photo: data.prfileURL,
           };
 
-          //DISPACHING AN ACTION
           dispatch(addUser(userData));
+
           navigate("/");
         })
         .catch((err) => console.log(err));
-      //NAVIGATE TO HOME
     } catch (err) {
       console.log(err);
     }
   };
 
+  // =========================
+  // SIGNUP
+  // =========================
+
+  const handleSignup = async () => {
+    try {
+      if (password !== confirmPassword) {
+        console.log("Passwords do not match");
+        return;
+      }
+
+      const signupData = {
+        firstname: firstName,
+        lastname: lastName,
+        email: email,
+        password: password,
+      };
+
+      console.log("Signup Data:", signupData);
+
+      await signUp(signupData)
+        .then((value) => {
+          const { data } = value.data;
+
+          const userData = {
+            email: data.email,
+            firstname: data.firstname,
+            lastName: data.lastname,
+          };
+
+          dispatch(addUser(userData));
+
+          navigate("/");
+        })
+        .catch((err) => console.log(err));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // =========================
+  // FORM SUBMIT
+  // =========================
+
+  const handleForm = (e) => {
+    e.preventDefault();
+
+    if (isSignUp) {
+      handleSignup();
+    } else {
+      handleLogin();
+    }
+  };
+
   return (
-    // LOGIN FORM
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
       <div className="w-full max-w-6xl overflow-hidden rounded-3xl bg-white shadow-2xl">
         <div className="grid lg:grid-cols-2">
-          {/* =====LEFT CARD===== */}
+          {/* ===== LEFT CARD ===== */}
+
           <div className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 p-12 text-white">
             <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+
             <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-cyan-300/10 blur-3xl" />
 
             <div className="relative z-10">
@@ -133,25 +208,81 @@ const Login = () => {
             </div>
           </div>
 
-          {/* =====RIGHT CARD===== */}
+          {/* ===== RIGHT CARD ===== */}
+
           <div className="flex items-center justify-center p-12">
             <div className="w-full max-w-md">
-              <h2 className="text-4xl font-bold text-gray-900">Welcome Devs</h2>
-              <p className="mt-2 text-gray-400 font-medium ">
-                Sign in to continue to DevMatch.
+              {/* HEADER */}
+
+              <h2 className="text-4xl font-bold text-gray-900">
+                {isSignUp ? "Create Account" : "Welcome Devs"}
+              </h2>
+
+              <p className="mt-2 text-gray-400 font-medium">
+                {isSignUp
+                  ? "Create your DevMatch account."
+                  : "Sign in to continue to DevMatch."}
               </p>
-              {/* ===FORM=== */}
-              <form
-                onSubmit={(e) => e.preventDefault()}
-                className="mt-10 space-y-6"
-              >
-                {/* ====EMAIL FIELD=== */}
+
+              {/* ===== FORM ===== */}
+
+              <form onSubmit={handleForm} className="mt-10 space-y-6">
+                {/* ===== FIRST NAME + LAST NAME ===== */}
+
+                {isSignUp && (
+                  <div className="grid grid-cols-2 gap-4">
+                    {/* FIRST NAME */}
+
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        First Name
+                      </label>
+
+                      <div className="input rounded-xl bg-blue-100 input-bordered w-full h-12 px-5">
+                        <User size={20} />
+
+                        <input
+                          type="text"
+                          value={firstName}
+                          onChange={handleFirstNameChange}
+                          placeholder="First name"
+                          className="w-full h-12 text-black placeholder:text-black pl-2"
+                        />
+                      </div>
+                    </div>
+
+                    {/* LAST NAME */}
+
+                    <div>
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        Last Name
+                      </label>
+
+                      <div className="input rounded-xl bg-blue-100 input-bordered w-full h-12 px-5">
+                        <User size={20} />
+
+                        <input
+                          type="text"
+                          value={lastName}
+                          onChange={handleLastNameChange}
+                          placeholder="Last name"
+                          className="w-full h-12 text-black placeholder:text-black pl-2"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* ===== EMAIL FIELD ===== */}
+
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-00">
+                  <label className="mb-2 block text-sm font-medium text-gray-700">
                     Email Address
                   </label>
+
                   <div className="input rounded-xl bg-blue-100 input-bordered w-full h-12 px-5">
                     <Mail />
+
                     <input
                       type="email"
                       value={email}
@@ -162,7 +293,8 @@ const Login = () => {
                   </div>
                 </div>
 
-                {/* ===PASSWORD FIELD=== */}
+                {/* ===== PASSWORD FIELD ===== */}
+
                 <div>
                   <label className="mb-2 block text-sm font-medium text-gray-700">
                     Password
@@ -170,43 +302,87 @@ const Login = () => {
 
                   <div className="input rounded-xl bg-blue-100 input-bordered w-full h-12 px-5">
                     <RectangleEllipsis />
+
                     <input
                       type="password"
                       value={password}
                       onChange={handlePasswordChange}
-                      placeholder="you@example.com"
+                      placeholder="Enter your password"
                       className="w-full h-12 text-black placeholder:text-black pl-2"
                     />
                   </div>
                 </div>
-                {/* ====fORGET PASSWORD=== */}
-                <div className="flex items-center justify-between">
-                  <button
-                    type="button"
-                    className="text-sm font-medium text-blue-600 hover:text-blue-700"
-                  >
-                    Forgot Password?
-                  </button>
-                </div>
 
-                {/* ====SIGN-IN BUTTON==== */}
+                {/* ===== CONFIRM PASSWORD ===== */}
+
+                {isSignUp && (
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">
+                      Confirm Password
+                    </label>
+
+                    <div className="input rounded-xl bg-blue-100 input-bordered w-full h-12 px-5">
+                      <RectangleEllipsis />
+
+                      <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={handleConfirmPasswordChange}
+                        placeholder="Confirm your password"
+                        className="w-full h-12 text-black placeholder:text-black pl-2"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* ===== FORGOT PASSWORD ===== */}
+
+                {!isSignUp && (
+                  <div className="flex items-center justify-between">
+                    <button
+                      type="button"
+                      className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                    >
+                      Forgot Password?
+                    </button>
+                  </div>
+                )}
+
+                {/* ===== SIGN IN / SIGN UP BUTTON ===== */}
+
                 <div>
                   <button
-                    onClick={handleForm}
-                    type="Submit"
+                    type="submit"
                     className="btn w-full h-12 rounded-xl border-none bg-blue-600 text-white hover:bg-blue-700"
                   >
-                    <LogIn />
-                    Sign In
+                    {isSignUp ? (
+                      <>
+                        <UserPlus />
+                        Create Account
+                      </>
+                    ) : (
+                      <>
+                        <LogIn />
+                        Sign In
+                      </>
+                    )}
                   </button>
                 </div>
               </form>
 
+              {/* ===== TOGGLE ===== */}
+
               <p className="mt-8 text-center text-sm text-gray-500">
-                Don't have an account?{" "}
-                <span className="cursor-pointer font-semibold text-blue-600 hover:text-blue-700">
-                  Create Account
-                </span>
+                {isSignUp
+                  ? "Already have an account?"
+                  : "Don't have an account?"}{" "}
+                <button
+                  type="button"
+                  onClick={() => setIsSignUp(!isSignUp)}
+                  className="font-semibold text-blue-600 hover:text-blue-700"
+                >
+                  {isSignUp ? "Sign In" : "Create Account"}
+                </button>
               </p>
             </div>
           </div>

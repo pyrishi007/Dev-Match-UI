@@ -32,3 +32,5 @@ export const userFeed = () =>
 
 export const sentConnectionRequest = (status, receiverUserId) =>
   axiosClient.post(`/request/send/${status}/${receiverUserId}`, {}, { withCredentials: true })
+
+export const signUp = (data) => axiosClient.post("/auth/register", data, { withCredentials: true })
