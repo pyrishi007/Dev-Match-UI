@@ -378,7 +378,10 @@ const Login = () => {
                   : "Don't have an account?"}{" "}
                 <button
                   type="button"
-                  onClick={() => setIsSignUp(!isSignUp)}
+                  onClick={() => {
+                    console.log("CREATE ACCOUNT CLICKED");
+                    setIsSignUp(!isSignUp);
+                  }}
                   className="font-semibold text-blue-600 hover:text-blue-700"
                 >
                   {isSignUp ? "Sign In" : "Create Account"}

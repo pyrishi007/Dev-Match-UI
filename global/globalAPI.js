@@ -10,7 +10,7 @@ export const loggedInUser = (data) =>
   axiosClient.post("/auth/login", data, { withCredentials: true });
 
 export const logoutUser = () =>
-  axiosClient.post("/auth/logout", { withCredentials: true });
+  axiosClient.post("/auth/logout", {}, { withCredentials: true });
 
 export const getUser = () =>
   axiosClient.get("/profile/view", { withCredentials: true });
