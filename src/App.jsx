@@ -1,9 +1,8 @@
-// == LIBRARY UTILS IMPORTS ==
+// ==LIBRARY UTILS IMPORTS==
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-// == COMPONENTS IMPORTS ==
+//==COMPONENTS IMPORTS==
 import AppLayout from "./AppLayout";
-
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Connections from "./pages/Connections";
@@ -11,53 +10,47 @@ import RequestFeed from "./pages/RequestFeed";
 import Login from "./pages/Auth/Login";
 import Profile from "./pages/Profile";
 import DiscoverFeed from "./pages/DiscoverFeed";
-
-// == LEGAL PAGES ==
 import Terms from "./pages/Legal/Terms";
 import Privacy from "./pages/Legal/Privacy";
 import Refund from "./pages/Legal/Refund";
 import Contact from "./pages/Legal/Contact";
-
-// == OTHER COMPONENTS ==
 import ScrollToTop from "./components/ScrollToTop";
-
-// ALL COMPONENT ROUTES
+//ALL COMPONENT ROUTES
 function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
+    <>
+  <>
+  {/* PROVIDING BROWSER ROUTER CONTEXT TO APP */}
+  <BrowserRouter>
 
-      <Routes>
+   <ScrollToTop />
+    {/* ROUTES TO NAVIGATE THE URL */}
+    <Routes>
 
-        {/* =========================
-            PROTECTED APP ROUTES
-        ========================== */}
-        <Route element={<AppLayout />}>
+      {/* PARENT ROUTE */}
+      <Route element={<AppLayout />}>
 
-          <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/connections" element={<Connections />} />
-          <Route path="/requestfeed" element={<RequestFeed />} />
-          <Route path="/discoverfeed" element={<DiscoverFeed />} />
-
-        </Route>
-
-
-        {/* =========================
-            PUBLIC ROUTES
-        ========================== */}
-
+        {/* CHILDREN ROUTES */}
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/connections" element={<Connections />} />
+        <Route path="/requestfeed" element={<RequestFeed />} />
+        <Route path="/discoverfeed" element={<DiscoverFeed />} />
 
-        {/* Legal pages MUST be outside AppLayout */}
+        {/* LEGAL PAGES */}
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/refund" element={<Refund />} />
         <Route path="/contact" element={<Contact />} />
 
-      </Routes>
-    </BrowserRouter>
+      </Route>
+
+    </Routes>
+  </BrowserRouter>
+</>
+    </>
   );
 }
 

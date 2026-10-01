@@ -1,33 +1,29 @@
-//==LIBRARY UTILS IMPORTS==
+// == LIBRARY UTILS IMPORTS ==
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-//==HOOKS==
+// == HOOKS ==
 import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
-//==COMPONENTS IMPORTS==
+// == COMPONENTS ==
 import Footer from "./components/LayoutUI/Footer";
 import Navbar from "./components/LayoutUI/Navbar";
 
-// ==APIS==
+// == API ==
 import { getUser } from "../global/globalAPI";
-import { useEffect } from "react";
+
+// == REDUX ==
 import { addUser } from "./redux/features/userSlice";
 
 const AppLayout = () => {
-  //==REDUX HOOKS==
   const location = useLocation();
   const dispatch = useDispatch();
-
-  //==ROUTER DOM==
   const navigate = useNavigate();
 
-  //CALL TO BACKEND
   const user = async () => {
     try {
-      //CALL TO BACKEND
       const { data } = await getUser();
 
-      //UPDATE THE STORE
       dispatch(
         addUser({
           email: data.email,
@@ -38,27 +34,34 @@ const AppLayout = () => {
           gender: data.gender,
           about: data.about,
           age: data.age,
-        }),
+        })
       );
     } catch (err) {
-      if (err.response.status === 401) {
-        return navigate("/login");
+      if (err.response?.status === 401) {
+        navigate("/login");
       }
     }
   };
 
-  //CALL USER AFTER 1st LOAD
-useEffect(() => {
-  if (location.pathname !== "/login") {
-    user();
-  }
-}, [location.pathname]);
+  // == PUBLIC ROUTES ==
+  const publicPaths = [
+    "/login",
+    "/terms",
+    "/privacy",
+    "/refund",
+    "/contact",
+  ];
+
+  useEffect(() => {
+    if (!publicPaths.includes(location.pathname)) {
+      user();
+    }
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      {/* All matching pages render here */}
       <main className="flex-1">
         <Outlet />
       </main>
