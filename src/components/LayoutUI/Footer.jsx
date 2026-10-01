@@ -1,15 +1,23 @@
-import {
-  Code2,
-  Mail,
-  ArrowUpRight,
-} from "lucide-react";
+// ===============================
+// LIBRARY IMPORTS
+// ===============================
+
+import { Code2, Mail, ArrowUpRight } from "lucide-react";
+
+import { Link } from "react-router-dom";
+
+// ===============================
+// FOOTER
+// ===============================
 
 const Footer = () => {
   return (
     <footer className="border-t border-gray-200 bg-white">
       <div className="max-w-7xl mx-auto px-6 py-20">
         <div className="grid lg:grid-cols-4 gap-16">
-          {/* Logo */}
+          {/* ===============================
+              LOGO
+          =============================== */}
 
           <div>
             <div className="flex items-center gap-3">
@@ -31,70 +39,106 @@ const Footer = () => {
               hackathons and grow together.
             </p>
 
-            {/* Social */}
+            {/* ===============================
+                SOCIAL
+            =============================== */}
 
             <div className="flex gap-4 mt-8">
-              <a className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-blue-600 hover:text-white transition">
+              <a
+                href="#"
+                aria-label="GitHub"
+                className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-blue-600 hover:text-white transition"
+              >
                 {/* <Github size={20} /> */}
               </a>
 
-              <a className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-blue-600 hover:text-white transition">
+              <a
+                href="#"
+                aria-label="LinkedIn"
+                className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-blue-600 hover:text-white transition"
+              >
                 {/* <Linkedin size={20} /> */}
               </a>
 
-              <a className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-blue-600 hover:text-white transition">
+              <a
+                href="#"
+                aria-label="Twitter"
+                className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-blue-600 hover:text-white transition"
+              >
                 {/* <Twitter size={20} /> */}
               </a>
 
-              <a className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-blue-600 hover:text-white transition">
+              <a
+                href={`mailto:gorai123@gmail.com`}
+                aria-label="Email DevMatch"
+                className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-blue-600 hover:text-white transition"
+              >
                 <Mail size={20} />
               </a>
             </div>
           </div>
 
-          {/* Product */}
+          {/* ===============================
+              PRODUCT
+          =============================== */}
 
           <div>
             <h3 className="font-bold text-lg">Product</h3>
 
             <div className="mt-6 space-y-4">
-              <a className="block text-gray-500 hover:text-blue-600">
+              <a href="#" className="block text-gray-500 hover:text-blue-600">
                 Features
               </a>
 
-              <a className="block text-gray-500 hover:text-blue-600">
+              <a href="#" className="block text-gray-500 hover:text-blue-600">
                 Discover Developers
               </a>
 
-              <a className="block text-gray-500 hover:text-blue-600">
+              <a href="#" className="block text-gray-500 hover:text-blue-600">
                 Community
               </a>
 
-              <a className="block text-gray-500 hover:text-blue-600">Updates</a>
+              <a href="#" className="block text-gray-500 hover:text-blue-600">
+                Updates
+              </a>
             </div>
           </div>
 
-          {/* Resources */}
+          {/* ===============================
+              RESOURCES
+          =============================== */}
 
           <div>
             <h3 className="font-bold text-lg">Resources</h3>
 
             <div className="mt-6 space-y-4">
-              <a className="block text-gray-500 hover:text-blue-600">
+              <Link
+                to="/contact"
+                className="block text-gray-500 hover:text-blue-600"
+              >
+                Support
+              </Link>
+
+              <Link
+                to="/contact"
+                className="block text-gray-500 hover:text-blue-600"
+              >
+                Help Center
+              </Link>
+
+              <a href="#" className="block text-gray-500 hover:text-blue-600">
                 Documentation
               </a>
 
-              <a className="block text-gray-500 hover:text-blue-600">Blog</a>
-
-              <a className="block text-gray-500 hover:text-blue-600">Support</a>
-
-              <a className="block text-gray-500 hover:text-blue-600">
-                Help Center
+              <a href="#" className="block text-gray-500 hover:text-blue-600">
+                Blog
               </a>
             </div>
           </div>
 
-          {/* CTA Card */}
+          {/* ===============================
+              CTA CARD
+          =============================== */}
 
           <div>
             <div className="rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-600 p-8 text-white">
@@ -104,27 +148,46 @@ const Footer = () => {
                 Join thousands of developers building together every day.
               </p>
 
-              <button className="btn bg-white text-blue-600 hover:bg-gray-100 rounded-full mt-8 border-none">
+              <Link
+                to="/"
+                className="btn bg-white text-blue-600 hover:bg-gray-100 rounded-full mt-8 border-none inline-flex items-center gap-2"
+              >
                 Get Started
                 <ArrowUpRight size={18} />
-              </button>
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* Bottom */}
+        {/* ===============================
+            BOTTOM
+        =============================== */}
 
         <div className="border-t border-gray-200 mt-16 pt-8 flex flex-col md:flex-row justify-between gap-4">
           <p className="text-gray-500">
             © {new Date().getFullYear()} DevMatch. All rights reserved.
           </p>
 
-          <div className="flex gap-8">
-            <a className="text-gray-500 hover:text-blue-600">Privacy Policy</a>
+          {/* ===============================
+              LEGAL LINKS
+          =============================== */}
 
-            <a className="text-gray-500 hover:text-blue-600">Terms</a>
+          <div className="flex flex-wrap gap-6">
+            <Link to="/privacy" className="text-gray-500 hover:text-blue-600">
+              Privacy Policy
+            </Link>
 
-            <a className="text-gray-500 hover:text-blue-600">Cookies</a>
+            <Link to="/terms" className="text-gray-500 hover:text-blue-600">
+              Terms & Conditions
+            </Link>
+
+            <Link to="/refund" className="text-gray-500 hover:text-blue-600">
+              Refund & Cancellation
+            </Link>
+
+            <Link to="/contact" className="text-gray-500 hover:text-blue-600">
+              Contact Us
+            </Link>
           </div>
         </div>
       </div>
